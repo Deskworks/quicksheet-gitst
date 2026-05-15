@@ -26,7 +26,7 @@ class Program
     {
         using var reader = new StreamReader(Console.OpenStandardInput(), Encoding.UTF8);
 
-        var register = new { type = "register", prefix = "gitst", version = 1 };
+        var register = new { type = "register", prefix = "gitst", version = "1.0.0" };
         Console.WriteLine(JsonSerializer.Serialize(register, JsonOpts));
 
         while (true)
