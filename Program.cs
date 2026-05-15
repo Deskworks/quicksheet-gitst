@@ -44,7 +44,11 @@ class Program
                 if (msgType == "activate")
                 {
                     var id = root.GetProperty("id").GetString() ?? "";
-                    var args = root.TryGetProperty("arguments", out var a) ? a.GetString() ?? "" : "";
+                    string args = "";
+                    if (root.TryGetProperty("params", out var p) && p.ValueKind == JsonValueKind.Array && p.GetArrayLength() > 0)
+                        args = p[0].GetString() ?? "";
+                    else if (root.TryGetProperty("arguments", out var a))
+                        args = a.GetString() ?? "";
                     await HandleActivate(id, args);
                 }
             }
