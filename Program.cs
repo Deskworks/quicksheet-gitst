@@ -26,7 +26,7 @@ class Program
     {
         using var reader = new StreamReader(Console.OpenStandardInput(), Encoding.UTF8);
 
-        var register = new { type = "register", prefix = "gitst", version = 1 };
+        var register = new { type = "register", prefix = "gitst", version = "1" };
         Console.WriteLine(JsonSerializer.Serialize(register, JsonOpts));
 
         while (true)
@@ -44,7 +44,15 @@ class Program
                 if (msgType == "activate")
                 {
                     var id = root.GetProperty("id").GetString() ?? "";
-                    var args = root.TryGetProperty("arguments", out var a) ? a.GetString() ?? "" : "";
+                    // QuickSheet sends user args as "params" (JSON array of strings)
+                    var args = "";
+                    if (root.TryGetProperty("params", out var p) && p.ValueKind == JsonValueKind.Array)
+                    {
+                        var parts = new List<string>();
+                        foreach (var item in p.EnumerateArray())
+                            parts.Add(item.GetString() ?? "");
+                        args = string.Join(",", parts);
+                    }
                     await HandleActivate(id, args);
                 }
             }
