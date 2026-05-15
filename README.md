@@ -4,34 +4,7 @@ A [QuickSheet](https://github.com/cemheren/QuickSheet) extension that shows git 
 
 ## What it does
 
-Scans one or more git repositories and displays a status dashboard — like a persistent `git status` for all your projects.
-
-```
-┌──────────────┬──────────┬─────────────────┬───────┬────────────────────────────┐
-│ Repo         │ Branch   │ Status          │ Stash │ Last Commit                │
-├──────────────┼──────────┼─────────────────┼───────┼────────────────────────────┤
-│ QuickSheet   │ main     │ ~3 +1 ?2        │ 📦2   │ fix: handle array format   │
-│ myapp        │ feature  │ ✅ clean         │ —     │ feat: add OAuth login      │
-│ infra        │ main     │ ~1 ↑2           │ 📦1   │ update k8s manifests       │
-└──────────────┴──────────┴─────────────────┴───────┴────────────────────────────┘
-```
-
-### Status symbols
-
-| Symbol | Meaning |
-|--------|---------|
-| `~N` | Modified files (unstaged) |
-| `+N` | Staged files |
-| `?N` | Untracked files |
-| `↑N` | Commits ahead of upstream |
-| `↓N` | Commits behind upstream |
-| `✅ clean` | Working tree is clean |
-| `📦N` | Stash entries |
-
-## Requirements
-
-- `git` CLI
-- .NET 9 SDK
+Writes a `git status`-style dashboard into the grid, one row per repo, starting at the cell where you invoke it. Refreshes every 30 seconds.
 
 ## Install
 
@@ -41,19 +14,50 @@ In any QuickSheet cell:
 ext: github:cemheren/quicksheet-gitst
 ```
 
+Requires `git` CLI and .NET 9 SDK.
+
 ## Usage
 
-| Command | Description |
-|---------|-------------|
-| `gitst:` | Scan current directory (and 1 level deep) for repos |
-| `gitst: ~/Projects/myapp` | Specific repo path |
-| `gitst: ~/proj/a, ~/proj/b` | Multiple repos (comma-separated) |
+Type one of these in a cell:
+
+| Cell contents                      | Shows                                          |
+|------------------------------------|------------------------------------------------|
+| `gitst:`                           | All repos in current dir (1 level deep)        |
+| `gitst: ~/Projects/myapp`          | A single specific repo                         |
+| `gitst: ~/proj/a, ~/proj/b`        | Multiple repos (comma-separated)               |
 
 Supports `~` expansion and environment variables.
 
+## Example
+
+Input — type `gitst:` in cell **A1**.
+
+Output — extension writes header + one row per repo, starting at A1:
+
+|     | A           | B        | C            | D     | E                          |
+|-----|-------------|----------|--------------|-------|----------------------------|
+| **1** | Repo        | Branch   | Status       | Stash | Last Commit                |
+| **2** | QuickSheet  | main     | ~3 +1 ?2     | 📦2   | fix: handle array format   |
+| **3** | myapp       | feature  | ✅ clean     | —     | feat: add OAuth login      |
+| **4** | infra       | main     | ~1 ↑2        | 📦1   | update k8s manifests       |
+
+Up to 15 repos are written. When no repos are found, A1 gets `No git repos found`.
+
+### Status column
+
+| Symbol     | Meaning                          |
+|------------|----------------------------------|
+| `~N`       | Modified files (unstaged)        |
+| `+N`       | Staged files                     |
+| `?N`       | Untracked files                  |
+| `↑N`       | Commits ahead of upstream        |
+| `↓N`       | Commits behind upstream          |
+| `✅ clean` | Working tree is clean            |
+| `📦N`      | Stash entries                    |
+
 ## How it works
 
-Runs `git` commands (`rev-parse`, `status --porcelain`, `rev-list`, `stash list`, `log`) for each repo path. Results cached for 30 seconds.
+Runs `git` commands (`rev-parse`, `status --porcelain`, `rev-list`, `stash list`, `log`) per repo. Results cached for 30 seconds.
 
 ## License
 
