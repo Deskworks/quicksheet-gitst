@@ -1,0 +1,9 @@
+{
+  "name": "gitst",
+  "description": "Git repository status dashboard — branch, changes, stashes on your wallpaper",
+  "version": "1.0.0",
+  "author": "cemheren",
+  "entry": "dotnet build --tl:false -nologo -v q QuickSheetGitst.csproj 1>&2 && dotnet run --no-build --project QuickSheetGitst.csproj",
+  "prefix": "gitst",
+  "repository": "https://github.com/cemheren/quicksheet-gitst"
+}
