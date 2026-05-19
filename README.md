@@ -11,7 +11,7 @@ Writes a `git status`-style dashboard into the grid, one row per repo, starting 
 In any QuickSheet cell:
 
 ```
-ext: github:cemheren/quicksheet-gitst
+ext: github:Deskworks/quicksheet-gitst
 ```
 
 Requires `git` CLI and .NET 9 SDK.
