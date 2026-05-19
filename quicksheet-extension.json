@@ -5,5 +5,5 @@
   "author": "cemheren",
   "entry": "dotnet build --tl:false -nologo -v q QuickSheetGitst.csproj 1>&2 && dotnet run --no-build --project QuickSheetGitst.csproj",
   "prefix": "gitst",
-  "repository": "https://github.com/cemheren/quicksheet-gitst"
+  "repository": "https://github.com/Deskworks/quicksheet-gitst"
 }
